@@ -1,7 +1,7 @@
 # Domain Assumptions & Sources — Assignment A
 
-Every number the assistant reports comes from the calculators in `knit_calc/`,
-which are driven by the constants in `knit_calc/data.py`. Those constants are
+Every number the assistant reports comes from the calculators in `src/`,
+which are driven by the constants in `src/data.ts`. Those constants are
 **explicit, documented approximations** and are deliberately easy to change in
 one place. This file records what they are, where they come from, and how
 confident we are.
@@ -11,7 +11,7 @@ confident we are.
 - **Craft Yarn Council (CYC) — Standard Yarn Weight System.** The authority most
   yarn labels and patterns reference. Gives the 0–7 weight categories, typical
   stockinette gauge ranges (stitches per 10 cm / 4 in), and recommended metric
-  needle-size ranges. Used for `typical_gauge`, `gauge_range`, `needle_range_mm`.
+  needle-size ranges. Used for `typicalGauge`, `gaugeRange`, `needleRangeMm`.
 - **Standard knitting-needle conversion charts** (metric ↔ US ↔ UK). Widely
   published and consistent across sources. Used for `NEEDLE_TABLE`.
 - General knitting references for how stitch patterns affect yarn consumption and
@@ -33,40 +33,40 @@ confident we are.
 - **Gauge and needle ranges: high confidence** — straight from the CYC standard.
 - **Metres per ball: medium confidence.** Real put-up varies a lot by brand and
   ball weight (25/50/100 g). These are typical mid-range figures for a common
-  ball. The CLI/API accepts a `metres_per_ball` override so a user can enter the
+  ball. The CLI/API accepts a `metresPerBall` override so a user can enter the
   exact figure from their yarn's ball band.
 - **Metres per cm²: lower confidence, the main modelling assumption.** Calibrated
   so a 50 × 60 cm (3000 cm²) worsted stockinette blanket ≈ 450 m, which matches
   typical real-world blanket yardage. Finer yarns scale up (more length packed
   into the same area). This is the number most worth refining with real data.
 
-## Yarn quantity model (`knit_calc/yarn.py`)
+## Yarn quantity model (`src/yarn.ts`)
 
 ```
-metres = area_cm² × metres_per_cm2(weight) × stitch_factor × gauge_factor
+metres = area_cm2 × metresPerCm2(weight) × stitchFactor × gaugeFactor
 ```
 
-- `area_cm²` = width × height (flat rectangular piece — see limitations).
-- `stitch_factor` — relative yarn use vs stockinette (=1.00): garter 1.15,
+- `area_cm2` = width × height (flat rectangular piece — see limitations).
+- `stitchFactor` — relative yarn use vs stockinette (=1.00): garter 1.15,
   rib 1.10, seed/moss 1.15, **cable 1.30**, lace pattern 0.85. Textured/cabled
   fabrics eat more yarn; open lace uses less. Medium confidence, easy to tune.
-- `gauge_factor` = user_gauge ÷ typical_gauge. Knitting tighter (more sts/10cm)
+- `gaugeFactor` = userGauge ÷ typicalGauge. Knitting tighter (more sts/10cm)
   means more, smaller stitches and more yarn, modelled as linear. Approximation.
 - A **safety margin** (default 10%) is added before converting to balls, because
   running out of a dye lot mid-project is a real, costly failure. Balls are
   rounded **up**.
 
-## Needle recommender (`knit_calc/needles.py`)
+## Needle recommender (`src/needles.ts`)
 
 - Picks a position inside the weight's CYC needle range by desired fabric:
   firm = 15% into the range (smaller needle, denser), balanced = midpoint,
   drapey = 85% (larger needle, softer), then **snaps to the nearest standard
   size** and reports metric/US/UK.
-- `project_type` is **advisory only** — it never changes the number, it only adds
+- `projectType` is **advisory only** — it never changes the number, it only adds
   a note (e.g. socks are often worked firmer). This keeps the recommendation
   honest and predictable.
 
-## Tension troubleshooter (`knit_calc/tension.py`)
+## Tension troubleshooter (`src/tension.ts`)
 
 - Compares target vs actual gauge (sts/10cm).
 - **More** sts/10cm than target ⇒ stitches too small ⇒ **too tight** ⇒ go **up** a
@@ -84,5 +84,5 @@ metres = area_cm² × metres_per_cm2(weight) × stitch_factor × gauge_factor
 - Yarn estimates are **planning figures**, not guarantees — hence the safety
   margin and the advice to buy from one dye lot.
 - Colourwork (Fair Isle, intarsia) and multi-yarn projects are not modelled.
-- All constants live in `knit_calc/data.py` and can be replaced with brand- or
+- All constants live in `src/data.ts` and can be replaced with brand- or
   test-specific data without touching the formulas.

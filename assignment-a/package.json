@@ -1,0 +1,24 @@
+{
+  "name": "knit-calc",
+  "version": "0.1.0",
+  "description": "Deterministic knitting calculators + CLI (Assignment A, part 1)",
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "bin": {
+    "knit-calc": "src/cli.ts"
+  },
+  "scripts": {
+    "cli": "tsx src/cli.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "tsx": "^4.16.0",
+    "typescript": "^5.5.0",
+    "vitest": "^2.0.0"
+  }
+}

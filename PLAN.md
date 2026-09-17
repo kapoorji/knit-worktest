@@ -64,17 +64,18 @@ stitch_type → generate ONE neutral/greyscale structure image (cached)
 
 | Concern | Decision | Rationale |
 |---|---|---|
-| Language | **Python 3.11+** | Brief preference; best for calculators + notebook + Pillow |
+| Language (A) | **TypeScript (Node 18+)** | Chosen 2026-09-17: static types suit a "trustworthy numbers" module and read well to a reviewer |
+| Language (B) | **Python (notebook)** — TBC | Pillow/Jupyter suit the image + tint pipeline; revisit at B kickoff (Node + `sharp` is a viable all-JS alt) |
 | LLM (A) | **Anthropic Claude Haiku** | Cheap, strong intent/tool extraction; narrow role (no numbers) |
 | Offline parser (A) | **Rule-based (regex/keyword) fallback** | Lets tests + eval run with no key; proves resilience |
 | Image model (B) | **OpenAI `gpt-image-1`** (primary) | Best structural instruction-following — the hardest eval line |
 | Image alt (B) | **Flux via fal.ai/Replicate** (documented) | Superior texture realism, near-free; noted trade-off in DECISIONS |
-| Colour (B) | **Pillow tint in code** | Exact hex, instant switching, tiny spend |
-| A interface | **CLI + eval script** (Streamlit only if time) | "Function over polish" |
+| Colour (B) | **Tint in code** (Pillow / `sharp`) | Exact hex, instant switching, tiny spend |
+| A interface | **CLI + eval script** | "Function over polish" |
 | B interface | **Jupyter notebook** | Inline side-by-side images; brief asks for it |
 | Caching (B) | **Filesystem, keyed on hash of full input dict** | Cache-hit flag + timing proves "identical call skips API" |
-| Ravelry | **`requests` + free API**, graceful timeout/no-match | Real call required |
-| Tests | **pytest** (calculators) + custom **eval script** (metrics table) | "Real metrics" |
+| Ravelry | **Free API**, graceful timeout/no-match | Real call required |
+| Tests (A) | **Vitest** (calculators) + custom **eval script** (metrics table) | "Real metrics" |
 | Secrets | **`.env` + `.env.example`**, mock mode default | Ground rules; runnable without our keys |
 
 **Cost posture:** dev entirely against mock/offline paths; real paid calls (Haiku + image
@@ -87,12 +88,12 @@ spend for the whole build: well under $1.
 
 ```
 knit-worktest/
-├── assignment-a/          # AI assistant, calculators, tests, eval script
-│   ├── knit_calc/         # deterministic calculators (yarn, needle, tension)
-│   ├── assistant.py       # NL→intent→calc→templated answer; LLM + offline mock
-│   ├── cli.py             # minimal interface
-│   ├── tests/             # pytest unit tests for calculators
-│   ├── eval/              # eval script + 15+ question dataset + report
+├── assignment-a/          # AI assistant, calculators, tests, eval script (TypeScript)
+│   ├── src/               # calculators (data/yarn/needles/tension), assistant, cli
+│   │   └── (assistant.ts) # NL→intent→calc→templated answer; LLM + offline mock (later)
+│   ├── test/              # Vitest unit tests
+│   ├── eval/              # eval script + 15+ question dataset + report (later)
+│   ├── package.json / tsconfig.json
 │   └── assumptions.md     # domain research: yarn weights, gauge, sources
 ├── assignment-b/          # swatch preview notebook + support module
 │   ├── swatch.ipynb       # runs every required behaviour inline
@@ -111,9 +112,9 @@ Media/cache/secrets are gitignored.
 
 ## 4. Build order (timeboxed ~10–12h)
 
-1. **Scaffold** repo, `.gitignore`, `.env.example`, deps. (~20m)
-2. **A calculators** + domain assumptions + pytest — the trust core, keyless. (~2h)
-3. **A assistant** (Haiku + offline parser) + CLI + decline path. (~1.5h)
+1. **Scaffold** repo, `.gitignore`, `.env.example`, deps. (~20m) ✅
+2. **A calculators** (TS) + CLI + Vitest + domain assumptions — the trust core, keyless. (~2h) ✅
+3. **A assistant** (Haiku + offline parser) + decline path. (~1.5h)
 4. **A eval script** (15+ Qs, checks routing/numbers/latency, prints report). (~1h)
 5. **B notebook**: prompt builder → generator (mock first) → cache → tint → fallback. (~2h)
 6. **B demos**: colour-switch (3 colours), stitch-variation (3 stitches), Ravelry compare. (~1.5h)
@@ -122,7 +123,7 @@ Media/cache/secrets are gitignored.
 9. **Commit/push milestones throughout; final polish + video script.** (buffer)
 
 Priority if time runs short (brief rewards this): A trust core + B core requirements +
-DECISIONS/DELIVERY_PLAN. Cut: Streamlit, tension troubleshooter, bonus tasks — and say so.
+DECISIONS/DELIVERY_PLAN. Cut: bonus tasks — and say so. (Tension troubleshooter already built.)
 
 ---
 
