@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.venv/
+venv/
+
+# Secrets
+.env
+
+# Assignment B generated media / cache
+assignment-b/cache/
+*.png
+*.jpg
+*.jpeg
+!**/reference/**   # keep any checked-in reference assets
+
+# OS / editor
+.DS_Store
+.ipynb_checkpoints/
