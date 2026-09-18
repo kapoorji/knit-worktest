@@ -9,6 +9,7 @@ dist/
 # Generated media / caches (assignment-b) — fixtures/ are tracked
 assignment-b/cache/
 assignment-b/output/
+VIDEO_SCRIPT.md
 
 # OS / editor
 .DS_Store
