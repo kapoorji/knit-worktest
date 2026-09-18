@@ -17,4 +17,16 @@ export type { TensionDiagnosis, TensionProblem, Severity } from "./tension.js";
 export { CalcError, YARN_WEIGHTS, resolveWeight } from "./data.js";
 export type { YarnWeight, NeedleSizes } from "./data.js";
 
-export const VERSION = "0.1.0";
+export { ask } from "./assistant.js";
+export type { AssistantAnswer } from "./assistant.js";
+
+export { parseOffline } from "./parse.js";
+export type { Extraction, Intent } from "./parse.js";
+
+export { getLlmClient, OfflineClient, AnthropicClient, OpenAiClient } from "./llm.js";
+export type { LlmClient } from "./llm.js";
+
+export { resolveLlmConfig } from "./env.js";
+export type { LlmConfig, Provider } from "./env.js";
+
+export const VERSION = "0.2.0";

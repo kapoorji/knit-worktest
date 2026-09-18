@@ -1,11 +1,13 @@
-# Assignment A — Knitting Calculators (Part 1: calculators + CLI)
+# Assignment A — Knitting Assistant with Trustworthy Numbers (TypeScript)
 
-Deterministic, tested knitting calculators with a command-line interface, in **TypeScript**.
+Deterministic, tested knitting calculators plus a natural-language assistant that
+**never invents a number**, with a command-line interface, in **TypeScript**.
 
-These calculators are the **single source of truth for every number** the AI
-assistant will report. They have **no runtime dependencies** and need **no API
-key** — they run fully offline. The natural-language assistant and evaluation
-script build on top of this module (added in later steps).
+The calculators are the **single source of truth for every number** the assistant
+reports. They have **no runtime dependencies** and need **no API key**. The
+assistant uses an LLM only to *understand* the question and *phrase* the answer —
+and any phrasing is verified against the computed numbers before it is shown.
+With no key set, it runs fully offline via a rule-based parser.
 
 ## What's here
 
@@ -16,10 +18,15 @@ assignment-a/
 │   ├── yarn.ts       # yarn quantity calculator
 │   ├── needles.ts    # needle size recommender
 │   ├── tension.ts    # gauge / tension troubleshooter
+│   ├── parse.ts      # keyless rule-based question parser (offline fallback)
+│   ├── llm.ts        # LLM clients: offline / Anthropic / OpenAI (via fetch)
+│   ├── env.ts        # .env loader + provider selection
+│   ├── assistant.ts  # understand -> compute -> verify -> phrase / decline
 │   ├── index.ts      # public exports
 │   └── cli.ts        # command-line interface
 ├── test/
-│   └── calculators.test.ts   # Vitest unit tests (23 tests)
+│   ├── calculators.test.ts   # 23 tests
+│   └── assistant.test.ts     # 10 tests (offline, keyless)
 ├── assumptions.md    # domain research, constants and sources
 ├── package.json
 ├── tsconfig.json
@@ -129,6 +136,53 @@ npm run cli -- needle --weight "spider silk"
 # Cannot compute: Unknown yarn weight: 'spider silk'. Known weights: Bulky, Fine, ...
 ```
 
+## The AI assistant (`ask`)
+
+Ask a natural-language question. The assistant:
+
+1. **Understands** — an LLM (or the keyless offline parser) extracts the intent
+   and parameters.
+2. **Computes** — the matching calculator produces the numbers. If inputs are
+   missing or the question is out of scope, it **declines** — it never guesses.
+3. **Phrases** — a deterministic template gives the canonical answer. If a real
+   LLM is configured it may rephrase it, but only if **every computed number
+   survives verification**; otherwise the trusted template is kept. Either way,
+   the numbers you see are the code's.
+
+```bash
+npm run cli -- ask "How much DK yarn do I need for a 50 x 60cm blanket in stockinette?"
+# For a 50 x 60 cm stockinette piece in Light (DK) yarn, you need about 600 m of
+# yarn (~660 m with a 10% safety margin), which is about 6 ball(s) at ~120 m per ball.
+
+npm run cli -- ask "My swatch is 24 stitches per 10cm but the pattern says 22. What's wrong?"
+# You are knitting too tight (24 vs target 22 sts/10cm, minor). Left unchanged the
+# piece would be about 8.3% smaller than intended. Fix: go up ~1 mm in needle size.
+
+npm run cli -- ask "What colour of yarn should I choose?"   # out of scope -> declines
+# I can help with yarn quantities, needle sizes, and gauge/tension problems...
+```
+
+Add `--json` to see full provenance — intent, extracted params, the raw
+calculator result (numbers **and** the assumptions used), which provider phrased
+it, and whether the numbers were verified. `--offline` forces the keyless parser.
+
+### Choosing a provider (optional — it works with no key)
+
+With **no key**, `ask` uses the offline parser — deterministic, free, and what the
+tests run against. To use an LLM for understanding + phrasing, copy `.env.example`
+to `.env` (at the repo root) and set **either**:
+
+```bash
+ANTHROPIC_API_KEY=...     # uses Claude Haiku (default model)
+# or
+OPENAI_API_KEY=...        # uses gpt-4o-mini
+```
+
+Selection: `ANTHROPIC_API_KEY` wins if both are set; override with
+`KNIT_LLM_PROVIDER=anthropic|openai|offline` and `KNIT_LLM_MODEL=<model>`. If the
+LLM call fails or times out, extraction falls back to the offline parser, so the
+assistant degrades gracefully rather than breaking.
+
 ## Using the calculators as a library
 
 ```ts
@@ -153,11 +207,13 @@ Invalid inputs throw a typed `CalcError` you can catch to decline cleanly.
 npm test
 ```
 ```
-Test Files  1 passed (1)
-     Tests  23 passed (23)
+Test Files  2 passed (2)
+     Tests  33 passed (33)
 ```
 
-The tests lock the reference calculations (e.g. the 50×60 cm DK blanket = 600 m /
-6 balls), the monotonic relationships (cable > stockinette > lace; finer yarn
-needs more metres; firm needle < drapey needle; too-tight goes up, too-loose goes
-down), and that invalid inputs throw cleanly.
+The calculator tests lock the reference figures (e.g. the 50×60 cm DK blanket =
+600 m / 6 balls) and the relationships that must hold (cable > stockinette > lace;
+finer yarn needs more metres; firm needle < drapey needle; too-tight goes up,
+too-loose goes down), plus clean errors on bad input. The assistant tests (keyless,
+offline) cover the three example questions end-to-end and the decline paths
+(out-of-scope, and missing required inputs).

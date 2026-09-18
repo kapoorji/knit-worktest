@@ -20,10 +20,13 @@ import { estimateYarn, formatYarn } from "./yarn.js";
 import { recommendNeedle, formatNeedle } from "./needles.js";
 import { diagnoseTension, formatTension } from "./tension.js";
 import { CalcError } from "./data.js";
+import { ask } from "./assistant.js";
+import { getLlmClient, OfflineClient } from "./llm.js";
 
-const USAGE = `knit-calc — deterministic knitting calculators
+const USAGE = `knit-calc — deterministic knitting calculators + assistant
 
 Usage:
+  ask      "<natural-language question>" [--offline] [--json]
   yarn     --width <cm> --height <cm> --weight <name> [--stitch <s>] [--gauge <n>]
            [--metres-per-ball <n>] [--safety <f>] [--json]
   needle   --weight <name> [--project <type>] [--fabric firm|balanced|drapey] [--json]
@@ -31,7 +34,10 @@ Usage:
 
 Weights: lace, super_fine (sock/fingering), fine (sport), light/dk, medium/worsted,
          bulky, super_bulky, jumbo — or a CYC number 0-7.
-Stitches: stockinette, garter, rib, seed, moss, cable, lace.`;
+Stitches: stockinette, garter, rib, seed, moss, cable, lace.
+
+'ask' uses an LLM if ANTHROPIC_API_KEY or OPENAI_API_KEY is set (see .env.example),
+otherwise a keyless offline parser. --offline forces the offline parser.`;
 
 function num(value: string | undefined, flag: string): number {
   if (value === undefined) throw new CalcError(`Missing required option ${flag}.`);
@@ -45,12 +51,31 @@ function optNum(value: string | undefined, flag: string): number | null {
   return num(value, flag);
 }
 
-function run(argv: string[]): number {
+async function run(argv: string[]): Promise<number> {
   const [command, ...rest] = argv;
 
   if (!command || command === "-h" || command === "--help") {
     console.log(USAGE);
     return command ? 0 : 1;
+  }
+
+  // 'ask' takes a free-text question as a positional argument.
+  if (command === "ask") {
+    const { values, positionals } = parseArgs({
+      args: rest,
+      options: { json: { type: "boolean" }, offline: { type: "boolean" } },
+      allowPositionals: true,
+    });
+    const question = positionals.join(" ").trim();
+    if (!question) {
+      console.error(`Provide a question, e.g.:\n  ask "How much DK yarn for a 50x60cm blanket in stockinette?"`);
+      return 2;
+    }
+    const client = values.offline ? new OfflineClient() : getLlmClient();
+    const result = await ask(question, client);
+    if (values.json) console.log(JSON.stringify(result, null, 2));
+    else console.log(result.answer);
+    return result.declined ? 1 : 0;
   }
 
   const configs: Record<string, ParseArgsConfig["options"]> = {
@@ -118,9 +143,9 @@ function run(argv: string[]): number {
   }
 }
 
-function main(): number {
+async function main(): Promise<number> {
   try {
-    return run(process.argv.slice(2));
+    return await run(process.argv.slice(2));
   } catch (err) {
     if (err instanceof CalcError) {
       // Calculators throw CalcError on inputs they cannot handle. Surface it
@@ -134,4 +159,4 @@ function main(): number {
   }
 }
 
-process.exit(main());
+process.exit(await main());
