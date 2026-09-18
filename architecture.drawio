@@ -1,0 +1,89 @@
+<mxfile host="app.diagrams.net" version="24.0.0">
+  <diagram name="Knit App LLD" id="knit-lld">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="920" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ===== Lane backgrounds ===== -->
+        <mxCell id="laneA" value="Assignment A — Trustworthy assistant (the LLM never produces a number)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EEF1FD;strokeColor=#C7CEDB;verticalAlign=top;align=left;spacingLeft=12;spacingTop=8;fontStyle=1;fontSize=13;fontColor=#3A56D6;" vertex="1" parent="1">
+          <mxGeometry x="40" y="60" width="540" height="640" as="geometry" />
+        </mxCell>
+        <mxCell id="laneB" value="Assignment B — Swatch preview (hybrid: native for trust, tint for speed)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E4F3F1;strokeColor=#C7CEDB;verticalAlign=top;align=left;spacingLeft=12;spacingTop=8;fontStyle=1;fontSize=13;fontColor=#0D8F83;" vertex="1" parent="1">
+          <mxGeometry x="620" y="60" width="540" height="640" as="geometry" />
+        </mxCell>
+        <mxCell id="found" value="Shared foundations — offline-first · typed · tested · cost-gated · plain fetch, no SDK" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F4F6FA;strokeColor=#C7CEDB;verticalAlign=top;align=left;spacingLeft=12;spacingTop=8;fontStyle=1;fontSize=12;fontColor=#5B6675;" vertex="1" parent="1">
+          <mxGeometry x="40" y="720" width="1120" height="150" as="geometry" />
+        </mxCell>
+
+        <!-- ===== Lane A nodes ===== -->
+        <mxCell id="a_z1" value="A1 · UNDERSTAND" style="text;html=1;fontFamily=monospace;fontSize=10;fontStyle=1;fontColor=#3A56D6;align=left;" vertex="1" parent="1"><mxGeometry x="70" y="90" width="160" height="16" as="geometry"/></mxCell>
+        <mxCell id="a_cli" value="&lt;b&gt;cli.ts&lt;/b&gt;&lt;br&gt;ask: how much DK yarn for a 50×60 blanket" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#3A56D6;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1"><mxGeometry x="210" y="110" width="250" height="46" as="geometry"/></mxCell>
+        <mxCell id="a_llm" value="&lt;b&gt;llm.ts&lt;/b&gt;&lt;br&gt;Offline parser · Anthropic Haiku · OpenAI" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#3A56D6;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1"><mxGeometry x="210" y="176" width="250" height="46" as="geometry"/></mxCell>
+        <mxCell id="a_parse" value="&lt;b&gt;parse.ts&lt;/b&gt;&lt;br&gt;Extraction { intent, params }" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#3A56D6;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1"><mxGeometry x="210" y="242" width="250" height="42" as="geometry"/></mxCell>
+
+        <mxCell id="a_z2" value="A2 · COMPUTE (source of truth)" style="text;html=1;fontFamily=monospace;fontSize=10;fontStyle=1;fontColor=#3A56D6;align=left;" vertex="1" parent="1"><mxGeometry x="70" y="300" width="220" height="16" as="geometry"/></mxCell>
+        <mxCell id="a_route" value="&lt;b&gt;assistant.ts&lt;/b&gt;&lt;br&gt;route(intent, params)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#3A56D6;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1"><mxGeometry x="210" y="320" width="250" height="42" as="geometry"/></mxCell>
+        <mxCell id="a_calc" value="&lt;b&gt;knit_calc/&lt;/b&gt;&lt;br&gt;yarn · needles · tension — pure, tested" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#3A56D6;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1"><mxGeometry x="210" y="388" width="250" height="48" as="geometry"/></mxCell>
+        <mxCell id="a_data" value="&lt;b&gt;data.ts&lt;/b&gt;&lt;br&gt;CYC constants" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#C7CEDB;fontSize=10;align=left;spacingLeft=6;" vertex="1" parent="1"><mxGeometry x="70" y="390" width="120" height="44" as="geometry"/></mxCell>
+
+        <mxCell id="a_z3" value="A3 · VERIFY &amp; ANSWER" style="text;html=1;fontFamily=monospace;fontSize=10;fontStyle=1;fontColor=#3A56D6;align=left;" vertex="1" parent="1"><mxGeometry x="70" y="462" width="200" height="16" as="geometry"/></mxCell>
+        <mxCell id="a_verify" value="&lt;b&gt;verify gate&lt;/b&gt;&lt;br&gt;every number must appear · else template" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAEEDA;strokeColor=#BF7209;strokeWidth=2;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1"><mxGeometry x="210" y="480" width="250" height="48" as="geometry"/></mxCell>
+        <mxCell id="a_answer" value="&lt;b&gt;answer&lt;/b&gt;&lt;br&gt;phrase (LLM) · else deterministic template" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#3A56D6;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1"><mxGeometry x="210" y="556" width="250" height="44" as="geometry"/></mxCell>
+        <mxCell id="a_decline" value="&lt;b&gt;decline&lt;/b&gt;&lt;br&gt;no numbers" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAEEDA;strokeColor=#BF7209;strokeWidth=2;fontSize=10;align=left;spacingLeft=6;" vertex="1" parent="1"><mxGeometry x="474" y="480" width="92" height="48" as="geometry"/></mxCell>
+        <mxCell id="a_eval" value="&lt;b&gt;eval/ — independent oracle&lt;/b&gt;&lt;br&gt;20 Qs · routing · numbers · latency · 100% offline" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#3A56D6;dashed=1;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1"><mxGeometry x="120" y="632" width="360" height="48" as="geometry"/></mxCell>
+
+        <!-- ===== Lane B nodes ===== -->
+        <mxCell id="b_z1" value="B1 · NORMALISE &amp; PROMPT" style="text;html=1;fontFamily=monospace;fontSize=10;fontStyle=1;fontColor=#0D8F83;align=left;" vertex="1" parent="1"><mxGeometry x="650" y="90" width="220" height="16" as="geometry"/></mxCell>
+        <mxCell id="b_schema" value="&lt;b&gt;schema.ts&lt;/b&gt;&lt;br&gt;normalise(input) · typed, hex expanded" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0D8F83;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1"><mxGeometry x="800" y="110" width="250" height="44" as="geometry"/></mxCell>
+        <mxCell id="b_prompt" value="&lt;b&gt;prompt.ts&lt;/b&gt;&lt;br&gt;buildPrompt · structure-first · PROMPT_VERSION" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0D8F83;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1"><mxGeometry x="800" y="176" width="250" height="44" as="geometry"/></mxCell>
+
+        <mxCell id="b_z2" value="B2 · GENERATE (cache-gated)" style="text;html=1;fontFamily=monospace;fontSize=10;fontStyle=1;fontColor=#0D8F83;align=left;" vertex="1" parent="1"><mxGeometry x="650" y="242" width="220" height="16" as="geometry"/></mxCell>
+        <mxCell id="b_cache" value="&lt;b&gt;cache.ts · structureKey&lt;/b&gt;&lt;br&gt;excludes colour → one base per stitch" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAEEDA;strokeColor=#BF7209;strokeWidth=2;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1"><mxGeometry x="800" y="260" width="250" height="48" as="geometry"/></mxCell>
+        <mxCell id="b_gen" value="&lt;b&gt;generator.ts&lt;/b&gt;&lt;br&gt;mock.ts SVG (keyless) · gpt-image-1 (--live)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0D8F83;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1"><mxGeometry x="800" y="336" width="250" height="48" as="geometry"/></mxCell>
+        <mxCell id="b_fb" value="&lt;b&gt;fallback.ts&lt;/b&gt;&lt;br&gt;transient · not cached" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAEEDA;strokeColor=#BF7209;strokeWidth=2;fontSize=10;align=left;spacingLeft=6;" vertex="1" parent="1"><mxGeometry x="630" y="338" width="150" height="44" as="geometry"/></mxCell>
+
+        <mxCell id="b_z3" value="B3 · COLOUR" style="text;html=1;fontFamily=monospace;fontSize=10;fontStyle=1;fontColor=#0D8F83;align=left;" vertex="1" parent="1"><mxGeometry x="650" y="404" width="200" height="16" as="geometry"/></mxCell>
+        <mxCell id="b_tint" value="&lt;b&gt;tint.ts + colour.ts&lt;/b&gt;&lt;br&gt;OKLab: hue+chroma = hex · ΔE2000 ≤ 2" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0D8F83;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1"><mxGeometry x="800" y="422" width="250" height="48" as="geometry"/></mxCell>
+
+        <mxCell id="b_z4" value="B4 · OUTPUT" style="text;html=1;fontFamily=monospace;fontSize=10;fontStyle=1;fontColor=#0D8F83;align=left;" vertex="1" parent="1"><mxGeometry x="650" y="486" width="200" height="16" as="geometry"/></mxCell>
+        <mxCell id="b_out" value="&lt;b&gt;contact-sheet.ts&lt;/b&gt;&lt;br&gt;→ output/index.html · self-contained" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0D8F83;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1"><mxGeometry x="800" y="504" width="250" height="44" as="geometry"/></mxCell>
+
+        <mxCell id="b_z5" value="B5 · REFERENCE" style="text;html=1;fontFamily=monospace;fontSize=10;fontStyle=1;fontColor=#0D8F83;align=left;" vertex="1" parent="1"><mxGeometry x="650" y="562" width="200" height="16" as="geometry"/></mxCell>
+        <mxCell id="b_rav" value="&lt;b&gt;ravelry.ts&lt;/b&gt;&lt;br&gt;real call · cassette when keyless · provenance" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0D8F83;fontSize=11;align=left;spacingLeft=8;" vertex="1" parent="1"><mxGeometry x="800" y="580" width="250" height="48" as="geometry"/></mxCell>
+
+        <!-- ===== Foundation chips ===== -->
+        <mxCell id="f1" value="env.ts · provider select" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#C7CEDB;fontFamily=monospace;fontSize=10;" vertex="1" parent="1"><mxGeometry x="60" y="760" width="200" height="40" as="geometry"/></mxCell>
+        <mxCell id="f2" value="colour.ts · OKLab / ΔE2000" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#C7CEDB;fontFamily=monospace;fontSize=10;" vertex="1" parent="1"><mxGeometry x="280" y="760" width="220" height="40" as="geometry"/></mxCell>
+        <mxCell id="f3" value="cache.ts · atomic writes (tmp→rename)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#C7CEDB;fontFamily=monospace;fontSize=10;" vertex="1" parent="1"><mxGeometry x="520" y="760" width="260" height="40" as="geometry"/></mxCell>
+        <mxCell id="f4" value="schema.ts · typed + normalised" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#C7CEDB;fontFamily=monospace;fontSize=10;" vertex="1" parent="1"><mxGeometry x="800" y="760" width="220" height="40" as="geometry"/></mxCell>
+        <mxCell id="f5" value="vitest · 35 + 13" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#C7CEDB;fontFamily=monospace;fontSize=10;" vertex="1" parent="1"><mxGeometry x="1040" y="760" width="100" height="40" as="geometry"/></mxCell>
+        <mxCell id="f6" value="offline-first / keyless" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#C7CEDB;fontFamily=monospace;fontSize=10;" vertex="1" parent="1"><mxGeometry x="60" y="812" width="220" height="40" as="geometry"/></mxCell>
+        <mxCell id="f7" value="cost-gated · --live opt-in" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#C7CEDB;fontFamily=monospace;fontSize=10;" vertex="1" parent="1"><mxGeometry x="300" y="812" width="220" height="40" as="geometry"/></mxCell>
+        <mxCell id="f8" value="graceful degradation · decline / fallback" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#C7CEDB;fontFamily=monospace;fontSize=10;" vertex="1" parent="1"><mxGeometry x="540" y="812" width="280" height="40" as="geometry"/></mxCell>
+        <mxCell id="f9" value="assumptions.md · CYC sources" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#C7CEDB;fontFamily=monospace;fontSize=10;" vertex="1" parent="1"><mxGeometry x="840" y="812" width="300" height="40" as="geometry"/></mxCell>
+
+        <!-- ===== Lane A edges ===== -->
+        <mxCell id="ea1" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#5B6675;endArrow=block;" edge="1" parent="1" source="a_cli" target="a_llm"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="ea2" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#5B6675;endArrow=block;" edge="1" parent="1" source="a_llm" target="a_parse"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="ea3" value="intent+params" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#5B6675;endArrow=block;fontSize=10;fontColor=#5B6675;" edge="1" parent="1" source="a_parse" target="a_route"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="ea4" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#5B6675;endArrow=block;" edge="1" parent="1" source="a_route" target="a_calc"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="ea5" value="constants" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#5B6675;endArrow=block;fontSize=10;fontColor=#5B6675;" edge="1" parent="1" source="a_data" target="a_calc"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="ea6" value="numbers" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#BF7209;endArrow=block;fontSize=10;fontColor=#BF7209;" edge="1" parent="1" source="a_calc" target="a_verify"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="ea7" value="verified" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#5B6675;endArrow=block;fontSize=10;fontColor=#5B6675;" edge="1" parent="1" source="a_verify" target="a_answer"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="ea8" value="unknown / missing" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#BF7209;endArrow=block;fontSize=10;fontColor=#BF7209;" edge="1" parent="1" source="a_verify" target="a_decline"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="ea9" value="checks" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#5B6675;endArrow=block;dashed=1;fontSize=10;fontColor=#5B6675;" edge="1" parent="1" source="a_eval" target="a_answer"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <!-- ===== Lane B edges ===== -->
+        <mxCell id="eb1" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#5B6675;endArrow=block;" edge="1" parent="1" source="b_schema" target="b_prompt"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="eb2" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#5B6675;endArrow=block;" edge="1" parent="1" source="b_prompt" target="b_cache"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="eb3" value="MISS→gen · HIT→reuse" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#BF7209;endArrow=block;fontSize=10;fontColor=#BF7209;" edge="1" parent="1" source="b_cache" target="b_gen"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="eb4" value="forceFail" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#BF7209;endArrow=block;fontSize=10;fontColor=#BF7209;" edge="1" parent="1" source="b_gen" target="b_fb"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="eb5" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#5B6675;endArrow=block;" edge="1" parent="1" source="b_gen" target="b_tint"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="eb6" value="tinted swatch" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#5B6675;endArrow=block;fontSize=10;fontColor=#5B6675;" edge="1" parent="1" source="b_tint" target="b_out"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="eb7" value="reference photo" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#5B6675;endArrow=block;fontSize=10;fontColor=#5B6675;" edge="1" parent="1" source="b_rav" target="b_out"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
