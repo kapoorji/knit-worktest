@@ -132,23 +132,49 @@ is a cache hit at zero milliseconds, on the colour-free structure key."
 
 ---
 
-## 3. Before this goes live (8:30–9:45)
+## 3. Before this could safely go live (8:30–10:15)
 
-[SAY] "Separate from latency, three things stand between this and real users:
+[SAY] "Separate from the latency note, here's what each assignment still needs
+before real users — I'll frame both the same way: **safety, cost, reliability**."
 
-1. **Inappropriate images** — inputs here are structured enums, so there's little
-   to abuse, but I'd gate every generated image through a moderation check before
-   display; the hook is designed in.
-2. **Cost when thousands of users try many colours** — the architecture already
-   answers this: cache plus preset pre-warming collapses cost from per-tap to a few
-   generations per pattern, with hard spend caps and alerts.
-3. **An AI provider going down** — the clients are provider-agnostic, and the
-   calculators, the tint, and the placeholder all work with no model at all. It
-   degrades to something useful, never a blank or a wrong answer."
+### Assignment A — the assistant (8:30–9:20)
+[SHOW] Left lane of the diagram.
+
+[SAY]
+- **Safety / trust.** The verification gate already blocks wrong numbers, but
+  before launch I'd widen the evaluation set well beyond 20 questions, and get a
+  knitting expert to sign off on the constants and approximations in `data.ts` —
+  those are the numbers people spend money on. I'd add output filtering so the
+  model's wording stays on-topic, guard against prompt-injection in the question,
+  and log every decline so we can see where it can't yet help.
+- **Cost.** The LLM only phrases, so calls are cheap — and the offline parser plus
+  templates mean many answers need no model call at all. At scale I'd cache answers
+  to common questions, rate-limit per user, and set a spend cap.
+- **Reliability.** If the LLM provider is down, it already falls back to the offline
+  parser and the deterministic templates, so the numbers still work. I'd add
+  monitoring, alerting, and a health check. And privacy: questions can contain
+  personal project details, so handle and log them carefully.
+
+### Assignment B — the swatch preview (9:20–10:15)
+[SHOW] Right lane of the diagram.
+
+[SAY]
+- **Preventing inappropriate images.** Inputs are structured enums, so there's
+  little to abuse — but I'd still run every generated image through a moderation /
+  NSFW check before it's shown, and review image rights and quality. The hook for
+  that gate is already designed in.
+- **Controlling cost when thousands of users try many colours.** The architecture
+  already answers this: cache plus preset pre-warming collapses cost from
+  per-tap to a few generations per *pattern*, not per user — with hard spend caps
+  and alerts, and a smaller/faster model tier on the warm path.
+- **If an AI provider goes down.** The clients are provider-agnostic, and the parts
+  that matter most — the in-code tint and the exact-hex placeholder — work with no
+  model at all. So an outage degrades to a useful, colour-correct preview, never a
+  blank screen or a crash. Plus CDN and storage for the cached images.
 
 ---
 
-## 4. Delivery plan + biggest risk (9:45–11:30)
+## 4. Two-minute summary — delivery plan + biggest risk (10:15–12:00)
 
 [SHOW] `DELIVERY_PLAN.md` weekly table.
 
