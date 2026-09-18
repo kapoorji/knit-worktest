@@ -3,22 +3,12 @@ node_modules/
 dist/
 *.tsbuildinfo
 
-# Python (Assignment B may use a notebook)
-__pycache__/
-*.py[cod]
-.venv/
-venv/
-.ipynb_checkpoints/
-
 # Secrets
 .env
 
-# Assignment B generated media / cache
+# Generated media / caches (assignment-b) — fixtures/ are tracked
 assignment-b/cache/
-*.png
-*.jpg
-*.jpeg
-!**/reference/**   # keep any checked-in reference assets
+assignment-b/output/
 
 # OS / editor
 .DS_Store

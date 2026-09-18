@@ -1,0 +1,9 @@
+{
+  "query": "cable",
+  "status": 200,
+  "patternName": "Sample Cabled Throw (placeholder)",
+  "permalink": "https://www.ravelry.com/patterns/library/example-cable-pattern",
+  "image": "reference.jpg",
+  "sample": true,
+  "note": "SAMPLE placeholder cassette — not a real capture. Run `npm run record-ravelry` with RAVELRY_* set (or the demo with --live) to fetch a genuine Ravelry response."
+}

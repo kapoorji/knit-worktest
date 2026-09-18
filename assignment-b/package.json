@@ -1,0 +1,22 @@
+{
+  "name": "knit-swatch",
+  "version": "0.1.0",
+  "description": "AI-generated knit swatch preview (Assignment B)",
+  "type": "module",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "demo": "tsx src/demo.ts",
+    "record-ravelry": "tsx src/ravelry.ts --record",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "sharp": "^0.33.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "tsx": "^4.16.0",
+    "typescript": "^5.5.0",
+    "vitest": "^2.0.0"
+  }
+}
