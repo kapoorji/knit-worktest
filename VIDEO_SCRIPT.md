@@ -22,14 +22,22 @@ lead the full build."
 ## 1. Assignment A — trustworthy assistant (0:45–4:15)
 
 ### Why it's structured this way (0:45–1:30)
-[SHOW] Left lane of the diagram.
+[SHOW] Left lane of the diagram — point at the two amber gates as you name them.
 
-[SAY] "The assistant never does arithmetic. An LLM — or a keyless offline parser —
-turns the question into intent plus parameters. Deterministic calculators produce
-every number. Then a verification gate: the model's phrasing is only shown if
-**every computed number survives verification**, otherwise we keep the trusted
-template. If it can't answer, it declines instead of guessing. That's the trust
-guarantee, by construction."
+[SAY] "The idea in one line: the AI reads the question and writes the reply, but
+the actual numbers come from plain, tested code — never from the model.
+
+Every question passes through three checks before anyone sees an answer:
+- **Check 1 — do we handle this? (intent).** Yarn amount, needle size, or tension.
+  If it's something else, it declines.
+- **Check 2 — do we have what we need? (inputs).** For example the dimensions and
+  the yarn weight. If something's missing, it asks — it doesn't guess.
+- **Check 3 — do the numbers match? (verification).** The model's wording is only
+  shown if every number in it matches what the calculator computed. If it doesn't,
+  we show the plain, guaranteed-correct template instead.
+
+So there are only two ways out: a correct, verified answer — or an honest 'I can't
+answer that.' Never a made-up number."
 
 ### It runs — answering (1:30–2:30)
 [SHOW] Terminal in `assignment-a`. Run:
