@@ -33,12 +33,42 @@ export interface AssistantAnswer {
   latencyMs: number;
 }
 
+export type Calculator = "yarn" | "needle" | "tension";
+
 interface Routed {
-  calculator: "yarn" | "needle" | "tension";
+  calculator: Calculator;
   result: unknown;
   canonical: string;
   /** the computed numbers that must appear in any rephrasing */
   criticalNumbers: string[];
+}
+
+/**
+ * The computed numbers that MUST survive rephrasing / appear in the answer for a
+ * given calculator result. Shared by the assistant (verification) and the eval
+ * harness (its oracle), so both agree on what "the numbers" are.
+ */
+export function criticalNumbers(calculator: Calculator, result: unknown): string[] {
+  if (calculator === "yarn") {
+    const r = result as { metres: number; metresWithSafety: number; balls: number };
+    return [String(r.metres), String(r.metresWithSafety), String(r.balls)];
+  }
+  if (calculator === "needle") {
+    const r = result as { metricMm: number; us: string; uk: string };
+    const crit = [String(r.metricMm)];
+    if (r.us !== "-") crit.push(r.us);
+    if (r.uk !== "-") crit.push(r.uk);
+    return crit;
+  }
+  const r = result as {
+    problem: string;
+    inputs: { actual: number; target: number };
+    sizeDeltaPct: number;
+    needleChangeMm: number;
+  };
+  return r.problem === "on_gauge"
+    ? [String(r.inputs.actual), String(r.inputs.target)]
+    : [String(Math.abs(r.sizeDeltaPct)), String(Math.abs(r.needleChangeMm))];
 }
 
 function has(params: Record<string, unknown>, key: string): boolean {
@@ -61,12 +91,7 @@ function route(intent: Intent, params: Record<string, unknown>): Routed {
         stitch: has(params, "stitch") ? String(params.stitch) : "stockinette",
         gaugeStsPer10cm: has(params, "gauge") ? n(params, "gauge") : null,
       });
-      return {
-        calculator: "yarn",
-        result,
-        canonical: formatYarn(result),
-        criticalNumbers: [String(result.metres), String(result.metresWithSafety), String(result.balls)],
-      };
+      return { calculator: "yarn", result, canonical: formatYarn(result), criticalNumbers: criticalNumbers("yarn", result) };
     }
     case "needle": {
       if (!has(params, "weight")) throw new CalcError("To recommend a needle size I need the yarn weight (e.g. DK, worsted).");
@@ -74,21 +99,14 @@ function route(intent: Intent, params: Record<string, unknown>): Routed {
         fabric: has(params, "fabric") ? String(params.fabric) : "balanced",
         projectType: has(params, "projectType") ? String(params.projectType) : null,
       });
-      const crit = [String(result.metricMm)];
-      if (result.us !== "-") crit.push(result.us);
-      if (result.uk !== "-") crit.push(result.uk);
-      return { calculator: "needle", result, canonical: formatNeedle(result), criticalNumbers: crit };
+      return { calculator: "needle", result, canonical: formatNeedle(result), criticalNumbers: criticalNumbers("needle", result) };
     }
     case "tension": {
       if (!has(params, "target") || !has(params, "actual")) {
         throw new CalcError("To diagnose tension I need both your swatch gauge and the pattern's gauge, in stitches per 10cm.");
       }
       const result = diagnoseTension(n(params, "target"), n(params, "actual"));
-      const crit =
-        result.problem === "on_gauge"
-          ? [String(result.inputs.actual), String(result.inputs.target)]
-          : [String(Math.abs(result.sizeDeltaPct)), String(Math.abs(result.needleChangeMm))];
-      return { calculator: "tension", result, canonical: formatTension(result), criticalNumbers: crit };
+      return { calculator: "tension", result, canonical: formatTension(result), criticalNumbers: criticalNumbers("tension", result) };
     }
     default:
       throw new CalcError(
@@ -98,7 +116,7 @@ function route(intent: Intent, params: Record<string, unknown>): Routed {
 }
 
 /** Whether `token` appears in `text` as a standalone number (not part of another). */
-function containsNumber(text: string, token: string): boolean {
+export function containsNumber(text: string, token: string): boolean {
   const escaped = token.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   return new RegExp(`(?<![\\d.])${escaped}(?![\\d.])`).test(text);
 }

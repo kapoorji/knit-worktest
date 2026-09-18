@@ -115,7 +115,7 @@ Media/cache/secrets are gitignored.
 1. **Scaffold** repo, `.gitignore`, `.env.example`, deps. (~20m) ✅
 2. **A calculators** (TS) + CLI + Vitest + domain assumptions — the trust core, keyless. (~2h) ✅
 3. **A assistant** (Haiku/OpenAI + keyless offline parser) + decline path + number-verified phrasing. (~1.5h) ✅
-4. **A eval script** (15+ Qs, checks routing/numbers/latency, prints report). (~1h)
+4. **A eval script** (20 Qs, checks routing/numbers/latency, prints report; 100% offline). (~1h) ✅
 5. **B notebook**: prompt builder → generator (mock first) → cache → tint → fallback. (~2h)
 6. **B demos**: colour-switch (3 colours), stitch-variation (3 stitches), Ravelry compare. (~1.5h)
 7. **Real API batch** (gated on your go): generate the ~6 base structures + a few Haiku calls. (~30m)

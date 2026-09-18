@@ -22,11 +22,13 @@ assignment-a/
 │   ├── llm.ts        # LLM clients: offline / Anthropic / OpenAI (via fetch)
 │   ├── env.ts        # .env loader + provider selection
 │   ├── assistant.ts  # understand -> compute -> verify -> phrase / decline
+│   ├── eval/         # evaluation harness: dataset (20 Qs) + runner + report
 │   ├── index.ts      # public exports
 │   └── cli.ts        # command-line interface
 ├── test/
 │   ├── calculators.test.ts   # 23 tests
-│   └── assistant.test.ts     # 10 tests (offline, keyless)
+│   ├── assistant.test.ts     # 10 tests (offline, keyless)
+│   └── eval.test.ts          # 2 tests — locks the eval to 100% offline
 ├── assumptions.md    # domain research, constants and sources
 ├── package.json
 ├── tsconfig.json
@@ -183,6 +185,43 @@ Selection: `ANTHROPIC_API_KEY` wins if both are set; override with
 LLM call fails or times out, extraction falls back to the offline parser, so the
 assistant degrades gracefully rather than breaking.
 
+## Evaluation (`npm run eval`)
+
+An end-to-end quality harness over a dataset of **20 realistic questions** (in
+`src/eval/dataset.ts`). For each it reports the three things that matter:
+
+- **routing** — was the right calculator used (or did it correctly decline)?
+- **numbers** — do the numbers in the answer match an **independent** calculation?
+  (The dataset computes the reference by calling the calculators directly, so the
+  eval checks the assistant against the calculators, not against itself.)
+- **ms** — response time, with min/avg/max across the run.
+
+It runs **offline (keyless) by default** and exits non-zero if anything fails.
+
+```bash
+npm run eval
+```
+```
+  #  expected  routing  numbers   ms   question
+   1  yarn       ✓      ✓       1  How much DK yarn do I need for a 50 x 60cm blanke...
+  ...
+  20  decline    ✓      –       0  Who invented knitting?
+
+  Summary
+    Routing accuracy   20/20 (100%)
+    Number accuracy    16/16 answered (100%)
+    Declined correctly 4/4
+    Latency            avg 0.2ms · min 0ms · max 1ms
+    PASS — all cases correct
+```
+
+The dataset covers all three calculators with varied phrasing/units, an on-gauge
+case, and four **must-decline** cases (out-of-scope and missing inputs) — so the
+eval measures that the assistant *refuses to guess*, not just that it answers.
+Add `--json` for a machine-readable report, or `--live` to run the same dataset
+through the configured LLM (shows real latency and that accuracy holds with a
+model in the loop).
+
 ## Using the calculators as a library
 
 ```ts
@@ -207,8 +246,8 @@ Invalid inputs throw a typed `CalcError` you can catch to decline cleanly.
 npm test
 ```
 ```
-Test Files  2 passed (2)
-     Tests  33 passed (33)
+Test Files  3 passed (3)
+     Tests  35 passed (35)
 ```
 
 The calculator tests lock the reference figures (e.g. the 50×60 cm DK blanket =
