@@ -65,14 +65,14 @@ stitch_type → generate ONE neutral/greyscale structure image (cached)
 | Concern | Decision | Rationale |
 |---|---|---|
 | Language (A) | **TypeScript (Node 18+)** | Chosen 2026-09-17: static types suit a "trustworthy numbers" module and read well to a reviewer |
-| Language (B) | **Python (notebook)** — TBC | Pillow/Jupyter suit the image + tint pipeline; revisit at B kickoff (Node + `sharp` is a viable all-JS alt) |
+| Language (B) | **TypeScript + `sharp` (Node 20)** | Decided 2026-09-18 after dual review: repo consistency with A; notebook stand-in = generated HTML contact sheet |
 | LLM (A) | **Anthropic Claude Haiku** | Cheap, strong intent/tool extraction; narrow role (no numbers) |
 | Offline parser (A) | **Rule-based (regex/keyword) fallback** | Lets tests + eval run with no key; proves resilience |
 | Image model (B) | **OpenAI `gpt-image-1`** (primary) | Best structural instruction-following — the hardest eval line |
 | Image alt (B) | **Flux via fal.ai/Replicate** (documented) | Superior texture realism, near-free; noted trade-off in DECISIONS |
-| Colour (B) | **Tint in code** (Pillow / `sharp`) | Exact hex, instant switching, tiny spend |
+| Colour (B) | **OKLab tint in code** (`sharp` raw buffers), ΔE2000-verified | Exact hue/chroma; native path for trust-critical presets (hybrid) |
 | A interface | **CLI + eval script** | "Function over polish" |
-| B interface | **Jupyter notebook** | Inline side-by-side images; brief asks for it |
+| B interface | **Generated HTML contact sheet** | Notebook stand-in for Node; inline side-by-side images in any browser |
 | Caching (B) | **Filesystem, keyed on hash of full input dict** | Cache-hit flag + timing proves "identical call skips API" |
 | Ravelry | **Free API**, graceful timeout/no-match | Real call required |
 | Tests (A) | **Vitest** (calculators) + custom **eval script** (metrics table) | "Real metrics" |
