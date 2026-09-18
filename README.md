@@ -18,8 +18,8 @@ knit-worktest/
 ├── assignment-b/        # swatch preview + demo (HTML contact sheet)     → assignment-b/README.md
 ├── DECISIONS.md         # technical + product rationale (both assignments)
 ├── PLAN.md              # overall plan & tool decisions
-├── LATENCY_NOTE.md      # (todo) making the swatch preview feel instant
-├── DELIVERY_PLAN.md     # (todo) 6-week MVP plan (1 FE + 1 BE)
+├── LATENCY_NOTE.md      # making the swatch preview feel instant
+├── DELIVERY_PLAN.md     # 6-week MVP plan (1 FE + 1 BE)
 ├── .env.example         # API key placeholders — copy to .env; no keys needed to run offline
 └── README.md            # this file
 ```
@@ -75,5 +75,4 @@ run and test everything for free.
 - Assignment B — complete offline (demo, tint, cache, fallback, Ravelry cassette;
   13 tests). Live `gpt-image-1` batch and a real Ravelry capture run once keys are
   added.
-- Leadership docs — `DECISIONS.md` done; `LATENCY_NOTE.md` and `DELIVERY_PLAN.md`
-  to follow.
+- Leadership docs — `DECISIONS.md`, `LATENCY_NOTE.md`, `DELIVERY_PLAN.md` done.
